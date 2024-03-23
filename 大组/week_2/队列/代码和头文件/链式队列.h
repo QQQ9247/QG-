@@ -84,8 +84,8 @@ int deQueue(LinkQueue* q, ElemType e)
 	{
 		//1.让t指向队头元素节点
 		t = q->front;
-		//2.把队头元素存储到e中
-		e = t->data;
+		//2.把开辟的空间free掉
+		free(t->data);
 		//3.删除队头元素节点
 		if (q->front->next == NULL)//只有1个元素
 		{
@@ -132,12 +132,19 @@ int lenghtLinkQueue(LinkQueue* q)
 
 }
 
+void gethead(LinkQueue* q)
+{
+	if (QueueEmpty) { printf("队列为空！"); return; }
+	printf("队头的值为：%c", *(char*)q->front -> data);
+}
+
+
 //输出队列
 void DispQueue(LinkQueue* q)
 {
 	DataNode* p;
 	p = q->front;
-	if (QueueEmpty) { printf("队列为空！"); return; }
+	if (!QueueEmpty) { printf("队列为空！"); return; }
 	else printf("队列元素为：");
 	while (p != NULL)
 	{

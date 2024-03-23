@@ -15,7 +15,7 @@ int main()
 				displaymenu(sel);
 			}
 			if (GetAsyncKeyState(VK_DOWN)) {
-				sel = (sel < 8) ? sel + 1 : sel;
+				sel = (sel < 9) ? sel + 1 : sel;
 				displaymenu(sel);
 			}
 			c = _getch();
@@ -27,7 +27,7 @@ int main()
 				printf("command is [%c] 按回车确认!", c);
 			}
 			else if (c == '\r') {
-				if (sel == 8) return 0;
+				if (sel == 9) return 0;
 				displaymenu(sel);
 				printf("command is [%c]\n", 'A' + sel - 1);
 				system("cls");
@@ -65,18 +65,18 @@ int main()
 					clear();
 					break;
 				case 6:
-					printf ("队列长度为：%d",lenghtLinkQueue(&lq));
+					lenghtLinkQueue(&lq);
 					clear();
 					break;
 				case 7:
 					DispQueue(&lq);
 					clear();
 					break;
-				/*case 8:
-					
+				case 8:
+					gethead(&lq);
 					clear();
 					break;
-				case 9:
+				/*case 9:
 
 					clear();
 					break;

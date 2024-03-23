@@ -6,7 +6,7 @@
 #include <Windows.h>
 #pragma comment(lib, "winmm.lib")
 int sel = 1;
-char MenuText[8][100] = {//菜单
+char MenuText[9][100] = {//菜单
 		"[A]  初始化链队",
 		"[B]  销毁链队",
 		"[C]  判断队是否为空",
@@ -14,8 +14,8 @@ char MenuText[8][100] = {//菜单
 		"[E]  出队操作",
 		"[F]  求队列长度",
 		"[G]  输出队",
-		/*"[H]  四则运算求值",
-		"[I]  单链表奇偶调换",
+		"[H]  取队头",
+		/*"[I]  单链表奇偶调换",
 		"[J]  找到单链表的中点",
 		"[K]  判断链表是否成环",
 		"[L]  反转链表(递归)",
@@ -66,7 +66,7 @@ void displaymenu(int hilight)
 	ColorChoose(2);
 	int i;
 	printf("==================================\n");
-	for (i = 0; i < 8; i++) {
+	for (i = 0; i < 9; i++) {
 		GoToxy(36, ++j);
 		if (i == hilight - 1)
 			printf("<<%s>>\n", MenuText[i]);
