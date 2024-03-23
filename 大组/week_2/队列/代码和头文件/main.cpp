@@ -65,7 +65,7 @@ int main()
 					clear();
 					break;
 				case 6:
-					lenghtLinkQueue(&lq);
+					printf ("队列长度为：%d",lenghtLinkQueue(&lq));
 					clear();
 					break;
 				case 7:

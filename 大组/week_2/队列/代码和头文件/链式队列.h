@@ -137,7 +137,8 @@ void DispQueue(LinkQueue* q)
 {
 	DataNode* p;
 	p = q->front;
-	printf("队列元素为：");
+	if (QueueEmpty) { printf("队列为空！"); return; }
+	else printf("队列元素为：");
 	while (p != NULL)
 	{
 		printf("%c ", *(char*)p->data);
