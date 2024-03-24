@@ -51,6 +51,12 @@ string TransExpToPostexp(string& exp)
 			}
 			else if (exp[i] == '*' || exp[i] == '/')
 			{
+				if (!StackEmpty(&optr) && (*(char*)(GetTop(&optr, &e))=='/'))
+				{
+					postexp += *(char*)(GetTop(&optr, &e));
+					postexp += ' ';//·Ö¸ô
+					Pop(&optr, &e);
+				}
 				Push(&optr, &exp[i]);
 			}
 			else if (exp[i] == '-' || exp[i] == '+')
