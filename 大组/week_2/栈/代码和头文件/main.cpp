@@ -81,8 +81,7 @@ int main()
 					printf("请输入中缀表达式：");
 					cin >> str;
 					postexp = TransExpToPostexp(str);
-					cout <<"后缀表达式为：" << postexp << endl;
-					cout << "最终结果为：" << Calculate(postexp) << endl;
+					Calculate(postexp);
 					clear();
 					break;
 				/*case 9:

@@ -2,12 +2,20 @@
 #include "链栈.h"
 #include <string>
 #include <iostream>
+
 using namespace std;
+StackNode optr;//运算符栈
+StackNode _data;//数据栈
+int empty() {
+	if (StackEmpty(&_data)) {
+		printf("表达式错误！\n"); 
+		return 1; }
+	return 0;
+}
 
 string TransExpToPostexp(string& exp)
 {
 	char e = ' ';
-	StackNode optr;//运算符栈
 	optr = *InitStack();
 	string postexp;//用于存放数字
 	for (int i = 0; i < exp.size(); i++)
@@ -58,7 +66,7 @@ string TransExpToPostexp(string& exp)
 			}
 			else//表达式错误
 			{
-				printf("表达式错误！");
+				printf("表达式错误！无法计算！\n");
 				return "0";
 			}
 		}
@@ -70,16 +78,17 @@ string TransExpToPostexp(string& exp)
 		postexp += ' ';//分隔
 		Pop(&optr, &e);
 	}
+	cout << "后缀表达式为：" << postexp << endl;
 	return postexp;
 }
 
 
 double Calculate(string postexp)
 {
-	StackNode data;//数据栈
-	data = *InitStack();
+	if (postexp == "0") return 0;
+	_data = *InitStack();
 	int n=0;
-	double e,*num;
+	double *e,*num;
 	for (int i = 0; i < postexp.size(); i++)
 	{
 		if (postexp[i] >= '0' && postexp[i] <= '9')//是数字则入栈
@@ -91,17 +100,19 @@ double Calculate(string postexp)
 			*num = atof(postexp.substr(left, right).c_str());//字符串转浮点
 
 			//cout << num << endl;
-			Push(&data, num);
+			Push(&_data, num);
 			i = right;
 		}
 		else//遇到操作符
 		{
 			printf("计算过程 %d：", ++n);
 			//取栈顶两数据，注意先后顺序，后一个才是左操作数
-			double right = *(double*)(GetTop(&data, &e));
-			Pop(&data, &e);
-			double left = *(double*)(GetTop(&data, &e));
-			Pop(&data, &e);
+			if (empty()) return 0;
+			double right = *(double*)(GetTop(&_data, &e));
+			Pop(&_data, &e);
+			if (empty()) return 0;
+			double left = *(double*)(GetTop(&_data, &e));
+			Pop(&_data, &e);
 			//判断操作符，得到数据再入栈
 			char optr = postexp[i];
 			double *sum,*cha,*ji,*shang;
@@ -110,34 +121,37 @@ double Calculate(string postexp)
 			case '+':
 				sum = (double*)malloc(sizeof(double));
 				*sum = left + right;
-				Push(&data, sum);
+				Push(&_data, sum);
 				break;
 			case '-':
 				cha = (double*)malloc(sizeof(double));
 				*cha = left - right;
-				Push(&data, cha);
+				Push(&_data, cha);
 				break;
 			case '*':
 				ji = (double*)malloc(sizeof(double));
 				*ji = left * right;
-				Push(&data, ji);
+				Push(&_data, ji);
 				break;
 			case '/':
-				if (right == 0.0) {
+				if (!right) {
 					printf("除数为0！无法计算\n");
 					return 0;
 				}
 				shang = (double*)malloc(sizeof(double));
 				*shang = left / right;
-				Push(&data, shang);
+				Push(&_data, shang);
 				break;
 			default:
 				printf("表达式出错！无法计算！\n");
-				return 0;
+				break;
 			}
-			cout << *(double*)(GetTop(&data, &e)) << endl;
+			cout << *(double*)(GetTop(&_data, e)) << endl;
 			i++;
 		}
 	}
-	return *(double*)(GetTop(&data, &e));
+	if (empty()) return 0;
+	cout << "最终结果为：" << *(double*)(GetTop(&_data, &e))<< endl;
+	return 0;
 }
+

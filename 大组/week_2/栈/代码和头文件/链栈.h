@@ -43,7 +43,7 @@ int Pop(StackNode* s, ElemType e)
 	{
 		//1.让t指向栈顶元素节点
 		t = s->next;
-		//2.把栈顶元素值存储到*e中
+		//2.把栈顶元素值存储到e中
 		e = t->data;
 		//3.删除
 		s->next = t->next;
@@ -61,6 +61,7 @@ int Pop(StackNode* s, ElemType e)
 //取栈顶元素
 ElemType GetTop(StackNode* s, ElemType e)
 {
+
 	if (s->next != NULL)//不空
 	{
 		e = s->next->data;
@@ -69,7 +70,7 @@ ElemType GetTop(StackNode* s, ElemType e)
 	else
 	{
 		printf("栈空，不能取栈顶元素！\n");
-		return 0;
+		return NULL;
 	}
 }
 
