@@ -131,88 +131,6 @@ void QuickSort(int* array, int left, int right)
 }
 
 
-//快速排序
-/*int PartSort1(int* array, int left, int right)
-{
-	int begin = left;
-	int end = right;
-	int key = array[left];
-	int pivot = left;
-	while (begin < end)
-	{
-		//找小
-		while (begin < end && array[end] >= key)
-		{
-			end--;
-		}
-		array[pivot] = array[end];
-		pivot = end;
-		//找大
-		while (begin < end && array[begin] <= key)
-		{
-			begin++;
-		}
-		array[pivot] = array[begin];
-		pivot = begin;
-	}
-	pivot = begin;
-	array[pivot] = key;
-
-	return pivot;
-}
-
-void QuickSort(int* array, int left, int right)
-{
-	if (left >= right-1)
-	{
-		return;
-	}
-	int keyindex = PartSort1(array, left, right-1);//左闭右开区间排序
-	QuickSort(array, left, keyindex);//对key的左边进行递归排序
-	QuickSort(array, keyindex + 1, right);//对key的右边进行递归排序
-}*/
-
-
-
-/*int PartSort1(int* a, int left, int right)
-{
-	int begin = left;
-	int end = right;
-	int key = a[left];
-	int pivot = left;
-	while (begin < end)
-	{
-		//找小
-		while (begin < end && a[end] >= key)
-		{
-			end--;
-		}
-		a[pivot] = a[end];
-		pivot = end;
-		//找大
-		while (begin < end && a[begin] <= key)
-		{
-			begin++;
-		}
-		a[pivot] = a[begin];
-		pivot = begin;
-	}
-	pivot = begin;
-	a[pivot] = key;
-
-	return pivot;
-}
-
-void QuickSort(int* a, int left, int right)
-{
-	if (left >= right)
-	{
-		return;
-	}
-	int keyindex = PartSort1(a, left, right);
-	QuickSort(a, left, keyindex - 1);//对key的左边进行递归排序
-	QuickSort(a, keyindex + 1, right);//对key的右边进行递归排序
-}*/
 
 
 //计数排序
@@ -241,29 +159,24 @@ void CountSort(int* array, int size)
 		perror("calloc fail!\n");
 		return;
 	}
-
+	int* out = (int*)calloc(size, sizeof(int));
 	for (i = 0; i < size; i++)
 	{
 		temp[array[i] - min]++;	//记录每个元素出现的次数
 	}
-
+	for (int i = 1; i < range; i++) temp[i] += temp[i - 1];
 	//排序
 	int j = 0;
-	for (i = 0; i < range; i++)
-	{
-		while (temp[i] > 0)
-		{
-			array[j] = i + min;	//将元素下标还原并写入原数组
-			j++;
-			temp[i]--;
-		}
-	}
-
+	for (j = size; j > 0; j--)  out[--temp[array[j - 1]-min]] = array[j - 1];
+	for (int i = 0; i < size; i++) array[i] = out[i];
+	free(out);
+	out = NULL;
 	free(temp);
 	temp = NULL;
 }
 
 //基数计数排序
+
 int maxbaits(int* array, int right)//求数位函数
 {
 	int max = INT_MIN;//设置最小值
@@ -281,55 +194,39 @@ int maxbaits(int* array, int right)//求数位函数
 	return res;
 }
 
-int getDigit(int x, int d)//获取当前数 位数 函数
+void RadixCountSort(int data[], int n) //基数排序
 {
-	return ((x / (int)pow(10, d - 1)) % 10);//计算当前位数值 
-}
-
-void RadixSort(int* arr, int L, int R, int digit)
-{
-	int radix = 10;//限制 累加
-	int i, j, d;
-	int* bucket = (int*)malloc((R - L + 1) * sizeof(int));//申请bucket
-	if (bucket == NULL)
-		return;
-	for (d = 1; d <= digit; d++)//多少位就循环多少次
+	int d = maxbaits(data, n);
+	int* tmp = new int[n];
+	int* count = new int[10]; //计数器
+	int i, j, k;
+	int radix = 1;
+	for (i = 1; i <= d; i++) //进行d次排序
 	{
-		int* count = (int*)calloc(radix,sizeof(int));//长度十的计数器
-		if (count == NULL)
-			return;
-		for (int i = L; i <= R; i++)
+		for (j = 0; j < 10; j++)
+			count[j] = 0; //每次分配前清空计数器
+		for (j = 0; j < n; j++)
 		{
-			j = getDigit(arr[i], d);//求当前位数
-			count[j]++;//对应索引值加1
+			k = (data[j] / radix) % 10; //统计每个桶中的记录数
+			count[k]++;
 		}
-		for (i = 1; i < radix; i++)
+		for (j = 1; j < 10; j++)
+			count[j] = count[j - 1] + count[j]; //将tmp中的位置依次分配给每个桶
+		for (j = n - 1; j >= 0; j--) //将所有桶中记录依次收集到tmp中
 		{
-			count[i] += count[i - 1];//累加
+			k = (data[j] / radix) % 10;
+			tmp[count[k] - 1] = data[j];
+			count[k]--;
 		}
-		for (i = R; i >= L; i--)//倒着放
-		{
-			j = getDigit(arr[i], d);//求当前位数
-			if(count[j]-1>=0&&j>=0) bucket[count[j] - 1] = arr[i];//bucket存放位置为 当前位数对应计数器索引的值减1
-			count[j]--;//让对应索引的值减一
-		}
-		for (i = L; i <= R; i++)
-		{
-			arr[i] = bucket[i];//写入原数组
-		}
-		free(count);//释放count空间
-		count = NULL;
+		for (j = 0; j < n; j++) //将临时数组的内容复制到data中
+			data[j] = tmp[j];
+		radix = radix * 10;
 	}
-	free(bucket);//释放bucket空间
-	bucket = NULL;
+	delete[]tmp;
+	delete[]count;
 }
 
-void RadixCountSort(int* arr, int L, int R)
-{
-	if (arr == NULL || R < 2)
-		return;
-	RadixSort(arr, L, R - 1, maxbaits(arr, R));
-}
+
 
 //颜色排序
 void SortColors(int array[], int numCount)

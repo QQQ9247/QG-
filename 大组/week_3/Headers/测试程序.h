@@ -45,7 +45,7 @@ void testSortingTime1(int numCount) {
     double elapsedTime4 = (double)(endTime4 - startTime4) * 1000 / CLOCKS_PER_SEC;
 
     clock_t startTime5 = clock();
-    RadixCountSort(nums, 0, numCount);//基数计数排序
+    RadixCountSort(nums,numCount);//基数计数排序
     clock_t endTime5 = clock();
     double elapsedTime5 = (double)(endTime5 - startTime5) * 1000 / CLOCKS_PER_SEC;
 
@@ -90,7 +90,7 @@ void testSortingTime2(int numCount,int repeatCount) {
         sum[3] += (double)(endTime4 - startTime4) * 1000 / CLOCKS_PER_SEC;
 
         clock_t startTime5 = clock();
-        RadixCountSort(nums, 0, numCount);//基数计数排序
+        RadixCountSort(nums,numCount);//基数计数排序
         clock_t endTime5 = clock();
         sum[4] += (double)(endTime5 - startTime5) * 1000 / CLOCKS_PER_SEC;
 
@@ -169,8 +169,8 @@ void readDataAndSort(const char* filename) {
         printf("\n排序后的数据为：\n");
         for (int i = 0; i < numCount; i++) printf("%d ", nums[i]);
         break;
-    case5:
-        RadixCountSort(nums, 0, numCount);
+    case 5:
+        RadixCountSort(nums,numCount);
         printf("\n排序后的数据为：\n");
         for (int i = 0; i < numCount; i++) printf("%d ", nums[i]);
         break;

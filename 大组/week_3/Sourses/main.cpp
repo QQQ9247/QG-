@@ -83,7 +83,7 @@ int main()
 					scanf("%d", &n);
 					printf("\n请输入%d个数据：", n);
 					for (int i = 0; i < n; i++) scanf("%d", &a[i]);
-					RadixCountSort(a, 0, n);
+					RadixCountSort(a,n);
 					printf("\n排序后的数据为：\n");
 					for (int i = 0; i < n; i++) printf("%d ", a[i]);
 					clear();
