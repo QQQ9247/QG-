@@ -63,37 +63,43 @@ void testSortingTime2(int numCount,int repeatCount) {
     {
         // 生成测试数据
         int* nums = (int*)malloc(numCount * sizeof(int));
+        int* temp = (int*)malloc(numCount * sizeof(int));
         generateTestData(nums, numCount, 1, numCount);
-
+        memcpy(temp, nums, numCount);
         // 记录排序开始时间
         clock_t startTime1 = clock();
-        InsertSort(nums, numCount);//插入排序
+        InsertSort(temp, numCount);//插入排序
         clock_t endTime1 = clock();
         sum[0] += (double)(endTime1 - startTime1) * 1000 / CLOCKS_PER_SEC;
 
+        memcpy(temp, nums, numCount);
         clock_t startTime2 = clock();
         int* t = (int*)malloc(numCount * sizeof(int));
-        MergeSort(nums, 0, numCount, t);//归并排序
+        MergeSort(temp, 0, numCount, t);//归并排序
         clock_t endTime2 = clock();
         sum[1] += (double)(endTime2 - startTime2) * 1000 / CLOCKS_PER_SEC;
         free(t);
         t = NULL;
 
+        memcpy(temp, nums, numCount);
         clock_t startTime3 = clock();
-        QuickSort(nums, 0, numCount);//快速排序
+        QuickSort(temp, 0, numCount);//快速排序
         clock_t endTime3 = clock();
         sum[2] += (double)(endTime3 - startTime3) * 1000 / CLOCKS_PER_SEC;
 
+        memcpy(temp, nums, numCount);
         clock_t startTime4 = clock();
-        CountSort(nums, numCount);//计数排序
+        CountSort(temp, numCount);//计数排序
         clock_t endTime4 = clock();
         sum[3] += (double)(endTime4 - startTime4) * 1000 / CLOCKS_PER_SEC;
 
+        memcpy(temp, nums, numCount);
         clock_t startTime5 = clock();
-        RadixCountSort(nums,numCount);//基数计数排序
+        RadixCountSort(temp,numCount);//基数计数排序
         clock_t endTime5 = clock();
         sum[4] += (double)(endTime5 - startTime5) * 1000 / CLOCKS_PER_SEC;
 
+        free(temp);
         free(nums);
         nums = NULL;
     }
